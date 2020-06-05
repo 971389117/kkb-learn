@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app">
+
+
+    </div>
+
+    <script>
+        //Object.defineProperty()
+        function defineReactive(obj, key, value) {
+            //value形成了闭包
+            Object.defineProperty(obj, key, {
+                get() {
+                    //读取拦截
+                    console.log('get', key, value);
+                    return value;
+                },
+                set(newValue) {
+                    // 写拦截
+                    if (value !== newValue) {
+                        console.log('set', key, newValue);
+                        value = newValue;
+
+                        update();
+                    }
+                },
+            })
+        }
+
+        function update() {
+            app.innerText = obj.foo;
+        }
+        const obj = {}
+        defineReactive(obj, 'foo', '')
+        obj.foo = new Date().toLocaleTimeString()
+
+        setInterval(() => {
+            obj.foo = new Date().toLocaleTimeString()
+        }, 1000)
+    </script>
+</body>
+
+</html>
